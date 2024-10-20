@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Logger API Viewer</title>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    /* Styling untuk map dan grafik agar ukurannya serupa */
+    #map, .chart-card {
+      width: 100%;
+      height: 285px;
+      border: 1px solid #b0bec5;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin: 20px 0;
+    }
+
+    /* Responsif */
+    @media (max-width: 768px) {
+      #map, .chart-card {
+        height: 300px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      #map, .chart-card {
+        height: 250px;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+  <div class="container mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-4 text-center text-indigo-600">Data Logger API Viewer</h1>
+
+    <!-- Map Section -->
+    <div id="map"></div>
+
+    <!-- Chart Section -->
+    <div class="p-6 bg-white shadow-md rounded-lg chart-card">
+      <div id="dataChart" class="w-full h-full"></div> 
+    </div>
+  </div>
+
+  <script>
+    let temperatureData = [];
+    let voltageData = [];
+    let timeLabels = [];
+
+    // Fungsi untuk memformat timestamp
+    function formatTimestamp(timestamp) {
+      const date = new Date(timestamp);
+      const day = String(date.getUTCDate()).padStart(2, '0'); // Mengambil hari
+      const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Mengambil bulan (0-11)
+      const year = String(date.getUTCFullYear()).slice(-2); // Mengambil dua digit terakhir dari tahun
+      return `${month}/${day}/${year}`; // Mengembalikan format baru
+    }
+
+    // Fetching data from ThingSpeak API
+    fetch('https://api.thingspeak.com/channels/2621036/feeds.json?api_key=KI5YO4SXV3MCH18T&results=12900')
+      .then(response => response.json())
+      .then(data => {
+        const feeds = data.feeds;
+
+        // Clear previous data
+        temperatureData = [];
+        voltageData = [];
+        timeLabels = [];
+
+        // Process feeds
+        feeds.forEach(feed => {
+          const timestamp = feed.created_at;
+          const formattedTimestamp = formatTimestamp(timestamp); // Format timestamp
+          const temperature = parseFloat(feed.field3);
+          const voltage = parseFloat(feed.field4);
+          
+          // Only push valid data
+          if (!isNaN(temperature) && !isNaN(voltage)) {
+            temperatureData.push(temperature);
+            voltageData.push(voltage);
+            timeLabels.push(formattedTimestamp); // Use formatted timestamp
+          }
+        });
+
+        // Draw the chart after fetching and processing the data
+        drawChart();
+      });
+
+    // Function to draw the chart using ApexCharts
+    function drawChart() {
+      var lastLabel = ""; // Keep track of the last label to compare
+      var options = {
+        chart: {
+          type: 'line',
+          height: '100%',
+          zoom: { enabled: true },
+          fontFamily: 'inherit' // Menggunakan font bawaan dari ApexCharts
+        },
+        series: [
+          {
+            name: 'Suhu (°C)',
+            data: temperatureData
+          },
+          {
+            name: 'Tegangan (%)',
+            data: voltageData
+          }
+        ],
+        xaxis: {
+          categories: timeLabels,
+          title: { text: 'Waktu' },
+          labels: {
+            formatter: function () {
+              return ""; // Menyembunyikan semua label di sumbu-x
+            },
+            style: {
+              fontSize: '1px', // Sesuaikan ukuran font
+              fontFamily: 'inherit' // Font bawaan dari ApexCharts
+            }
+          },
+          tickAmount: 6, // Set jumlah tick label di sumbu-x agar tetap proporsional
+        },
+        tooltip: {
+          shared: true,
+          intersect: false,
+          x: {
+            formatter: function (value, { seriesIndex, dataPointIndex }) {
+              const timestamp = timeLabels[dataPointIndex];
+              return `Timestamp: ${timestamp}`;
+            }
+          }
+        },
+        yaxis: {
+          title: { text: 'Nilai' },
+          labels: {
+            formatter: function (value) {
+              return Math.round(value).toString().slice(0, 3); // Membatasi menjadi 3 digit tanpa koma
+            },
+            style: {
+              fontSize: '12px',
+              fontFamily: 'inherit' // Font bawaan dari ApexCharts
+            }
+          }
+        },
+        stroke: {
+          curve: 'smooth'
+        },
+        colors: ['#ff6384', '#36a2eb'],
+        fill: {
+          type: 'gradient',
+          gradient: {
+            shade: 'light',
+            type: 'vertical',
+            gradientToColors: ['#ff9f40', '#4bc0c0'],
+            stops: [0, 100]
+          }
+        }
+      };
+
+      var chart = new ApexCharts(document.querySelector("#dataChart"), options);
+      chart.render();
+    }
+  </script>
+</body>
+</html>
