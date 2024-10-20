@@ -251,7 +251,15 @@
           pageContent.innerHTML = "<h1>Ringkasan</h1><p>This is the overview page.</p>";
           break;
         case '/analysis':
-          pageContent.innerHTML = "<h1>Analisis</h1><p>This is the analysis page.</p>";
+          // Load the analysis page dynamically via AJAX
+          fetch('content/analysis.html')
+            .then(response => response.text())
+            .then(data => {
+              pageContent.innerHTML = data;
+            })
+            .catch(error => {
+              pageContent.innerHTML = "<h1>Error</h1><p>Failed to load the analysis page.</p>";
+            });
           break;
         case '/projects':
           pageContent.innerHTML = "<h1>Projects</h1><p>This is the projects page.</p>";
