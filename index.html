@@ -10,7 +10,6 @@
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
   <style>
-    /* Importing Google font - Poppins */
     @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
 
     * {
@@ -23,6 +22,7 @@
     body {
       min-height: 100vh;
       background: #F0F4FF;
+      overflow-x: hidden;
     }
 
     .sidebar {
@@ -34,7 +34,7 @@
       display: flex;
       overflow-x: hidden;
       flex-direction: column;
-      background: #8fc9ff; /* Warna biru cerah untuk sidebar */
+      background: #8fc9ff;
       padding: 25px 20px;
       transition: all 0.4s ease;
     }
@@ -54,45 +54,19 @@
     }
 
     .sidebar .sidebar-header h3 {
-      color: #1e2e3e; /* Ubah warna teks sidebar menjadi hitam */
+      color: #1e2e3e;
       font-size: 1.25rem;
       font-weight: 600;
       white-space: nowrap;
       margin-left: 23px;
     }
 
-    .sidebar-links h4 {
-      color: #000; /* Warna font untuk kategori menu */
-      font-weight: 500;
-      white-space: nowrap;
-      margin: 10px 0;
-      position: relative;
+    .sidebar .sidebar-header h3 {
+      display: none;
     }
 
-    .sidebar-links h4 span {
-      opacity: 0;
-    }
-
-    .sidebar:hover .sidebar-links h4 span {
-      opacity: 1;
-    }
-
-    .sidebar-links .menu-separator {
-      position: absolute;
-      left: 0;
-      top: 50%;
-      width: 100%;
-      height: 1px;
-      transform: scaleX(1);
-      transform: translateY(-50%);
-      background: #4f52ba;
-      transform-origin: right;
-      transition-delay: 0.2s;
-    }
-
-    .sidebar:hover .sidebar-links .menu-separator {
-      transition-delay: 0s;
-      transform: scaleX(0);
+    .sidebar:hover .sidebar-header h3 {
+      display: block;
     }
 
     .sidebar-links {
@@ -111,7 +85,7 @@
       display: flex;
       align-items: center;
       gap: 0 20px;
-      color: #000; /* Warna teks item menu menjadi hitam */
+      color: #000;
       font-weight: 500;
       white-space: nowrap;
       padding: 15px 10px;
@@ -123,6 +97,40 @@
       color: #161a2d;
       background: #fff;
       border-radius: 4px;
+    }
+
+    .sidebar-links h4 {
+      color: #000;
+      font-weight: 500;
+      white-space: nowrap;
+      margin: 10px 0;
+      position: relative;
+    }
+
+    .sidebar-links h4 span {
+      opacity: 0;
+    }
+
+    .sidebar:hover .sidebar-links h4 span {
+      opacity: 1;
+    }
+
+    .menu-separator {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 100%;
+      height: 1px;
+      background: #4f52ba;
+      transform: scaleX(1);
+      transform: translateY(-50%);
+      transform-origin: right;
+      transition-delay: 0.2s;
+    }
+
+    .sidebar:hover .menu-separator {
+      transition-delay: 0s;
+      transform: scaleX(0);
     }
 
     .user-account {
@@ -162,71 +170,53 @@
       background: #fff;
       border-radius: 4px;
     }
+
+    /* Responsive styles */
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 60px;
+      }
+
+      .sidebar:hover {
+        width: 200px;
+      }
+
+      .sidebar .sidebar-header h3 {
+        font-size: 1rem;
+      }
+
+      .user-profile img {
+        width: 35px;
+      }
+
+      .user-profile h3 {
+        font-size: 0.875rem;
+      }
+    }
   </style>
 </head>
+
 <body>
   <aside class="sidebar">
     <div class="sidebar-header">
-      <img src="images/profile-img.png" alt="image/profile-img" />
+      <img src="images/profile-img.png" alt="Profile Image" />
       <h3>Trackme+</h3>
     </div>
     <ul class="sidebar-links">
-      <h4>
-        <span>Main Menu</span>
-        <div class="menu-separator"></div>
-      </h4>
-      <li>
-        <a href="javascript:void(0)" onclick="navigateTo('/dashboard')">
-          <span class="material-symbols-outlined"> dashboard </span>Dashboard</a>
-      </li>
-      <li>
-        <a href="javascript:void(0)" onclick="navigateTo('/overview')">
-          <span class="material-symbols-outlined"> overview </span>Ringkasan</a>
-      </li>
-      <li>
-        <a href="javascript:void(0)" onclick="navigateTo('/analysis')">
-          <span class="material-symbols-outlined"> monitoring </span>Analisis</a>
-      </li>
-      <h4>
-        <span>General</span>
-        <div class="menu-separator"></div>
-      </h4>
-      <li>
-        <a href="javascript:void(0)" onclick="navigateTo('/projects')">
-          <span class="material-symbols-outlined"> folder </span>Projects</a>
-      </li>
-      <li>
-        <a href="javascript:void(0)" onclick="navigateTo('/groups')">
-          <span class="material-symbols-outlined"> groups </span>Grup</a>
-      </li>
-      <li>
-        <a href="javascript:void(0)" onclick="navigateTo('/download')">
-          <span class="material-symbols-outlined"> move_up </span>Unduh</a>
-      </li>
-      <li>
-        <a href="javascript:void(0)" onclick="navigateTo('/reports')">
-          <span class="material-symbols-outlined"> flag </span>Semua Laporan</a>
-      </li>
-      <li>
-        <a href="javascript:void(0)" onclick="navigateTo('/notifications')">
-          <span class="material-symbols-outlined"> notifications_active </span>Notifikasi</a>
-      </li>
-      <h4>
-        <span>Account</span>
-        <div class="menu-separator"></div>
-      </h4>
-      <li>
-        <a href="javascript:void(0)" onclick="navigateTo('/profile')">
-          <span class="material-symbols-outlined"> account_circle </span>Profil</a>
-      </li>
-      <li>
-        <a href="javascript:void(0)" onclick="navigateTo('/settings')">
-          <span class="material-symbols-outlined"> settings </span>Pengaturan</a>
-      </li>
-      <li>
-        <a href="javascript:void(0)" onclick="navigateTo('/logout')">
-          <span class="material-symbols-outlined"> logout </span>Keluar</a>
-      </li>
+      <h4><span>Main Menu</span><div class="menu-separator"></div></h4>
+      <li><a href="javascript:void(0)" onclick="navigateTo('/dashboard')"><span class="material-symbols-outlined">dashboard</span>Dashboard</a></li>
+      <li><a href="javascript:void(0)" onclick="navigateTo('/overview')"><span class="material-symbols-outlined">overview</span>Ringkasan</a></li>
+      <li><a href="javascript:void(0)" onclick="navigateTo('/analysis')"><span class="material-symbols-outlined">monitoring</span>Analisis</a></li>
+      <h4><span>General</span><div class="menu-separator"></div></h4>
+      <li><a href="javascript:void(0)" onclick="navigateTo('/projects')"><span class="material-symbols-outlined">folder</span>Projects</a></li>
+      <li><a href="javascript:void(0)" onclick="navigateTo('/groups')"><span class="material-symbols-outlined">groups</span>Grup</a></li>
+      <li><a href="javascript:void(0)" onclick="navigateTo('/download')"><span class="material-symbols-outlined">move_up</span>Unduh</a></li>
+      <li><a href="javascript:void(0)" onclick="navigateTo('/reports')"><span class="material-symbols-outlined">flag</span>Semua Laporan</a></li>
+      <li><a href="javascript:void(0)" onclick="navigateTo('/notifications')"><span class="material-symbols-outlined">notifications_active</span>Notifikasi</a></li>
+      <h4><span>Account</span><div class="menu-separator"></div></h4>
+      <li><a href="javascript:void(0)" onclick="navigateTo('/profile')"><span class="material-symbols-outlined">account_circle</span>Profil</a></li>
+      <li><a href="javascript:void(0)" onclick="navigateTo('/settings')"><span class="material-symbols-outlined">settings</span>Pengaturan</a></li>
+      <li><a href="javascript:void(0)" onclick="navigateTo('/logout')"><span class="material-symbols-outlined">logout</span>Keluar</a></li>
     </ul>
     <div class="user-account">
       <div class="user-profile">
@@ -246,13 +236,11 @@
   </div>
 
   <script>
-    // Function to navigate to subpath
     function navigateTo(subpath) {
       window.history.pushState({}, "", subpath);
       showPage(subpath);
     }
 
-    // Function to show page based on subpath
     function showPage(subpath) {
       const pageContent = document.getElementById('pageContent');
       switch (subpath) {
@@ -287,17 +275,12 @@
           pageContent.innerHTML = "<h1>Pengaturan</h1><p>This is the settings page.</p>";
           break;
         case '/logout':
-          pageContent.innerHTML = "<h1>Keluar</h1><p>You have logged out.</p>";
+          pageContent.innerHTML = "<h1>Keluar</h1><p>Logging out...</p>";
           break;
         default:
           pageContent.innerHTML = "<h1>Welcome to Trackme+</h1><p>Select a menu to navigate.</p>";
-          break;
       }
     }
-
-    // Load the correct page based on the current URL path when the page loads
-    window.onload = function() {
-      showPage(window.location.pathname);
-    };
   </script>
 </body>
+</html>
